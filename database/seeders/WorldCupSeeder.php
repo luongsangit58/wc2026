@@ -145,10 +145,22 @@ class WorldCupSeeder extends Seeder
     {
         $data = $this->json('worldcup.json');
 
+        // index players by team + normalised name so real scorers can be matched
+        $playerIndex = [];
+        foreach (Player::select('id', 'team_id', 'name')->get() as $pl) {
+            $playerIndex[$pl->team_id][$this->norm($pl->name)] = $pl->id;
+        }
+        $goalTally = [];
+
         foreach ($data['matches'] as $m) {
             [$stage, $matchday] = $this->resolveStage($m['round']);
-
             $groupLetter = isset($m['group']) ? Str::after($m['group'], 'Group ') : null;
+
+            $ft = $m['score']['ft'] ?? null;            // [home, away] once played
+            $finished = is_array($ft) && count($ft) === 2;
+
+            $team1Id = $teams[$m['team1']]->id ?? null;
+            $team2Id = $teams[$m['team2']]->id ?? null;
 
             Fixture::create([
                 'num' => $m['num'] ?? null,
@@ -160,13 +172,44 @@ class WorldCupSeeder extends Seeder
                 'match_date' => $m['date'],
                 'time_label' => $m['time'] ?? null,
                 'kickoff_at' => $this->toUtc($m['date'], $m['time'] ?? null),
-                'team1_id' => $teams[$m['team1']]->id ?? null,
-                'team2_id' => $teams[$m['team2']]->id ?? null,
+                'team1_id' => $team1Id,
+                'team2_id' => $team2Id,
                 'team1_placeholder' => isset($teams[$m['team1']]) ? null : $m['team1'],
                 'team2_placeholder' => isset($teams[$m['team2']]) ? null : $m['team2'],
-                'status' => 'scheduled',
+                'status' => $finished ? 'finished' : 'scheduled',
+                'team1_score' => $finished ? $ft[0] : null,
+                'team2_score' => $finished ? $ft[1] : null,
             ]);
+
+            if ($finished) {
+                $this->tallyGoals($goalTally, $playerIndex[$team1Id] ?? [], $m['goals1'] ?? []);
+                $this->tallyGoals($goalTally, $playerIndex[$team2Id] ?? [], $m['goals2'] ?? []);
+            }
         }
+
+        foreach ($goalTally as $playerId => $goals) {
+            Player::whereKey($playerId)->update(['goals' => $goals]);
+        }
+    }
+
+    /** Add real goals to the tally, matching scorer names to squad players. */
+    private function tallyGoals(array &$tally, array $nameToId, array $goals): void
+    {
+        foreach ($goals as $g) {
+            if (empty($g['name'])) {
+                continue;
+            }
+            $id = $nameToId[$this->norm($g['name'])] ?? null;
+            if ($id) {
+                $tally[$id] = ($tally[$id] ?? 0) + 1;
+            }
+        }
+    }
+
+    /** Lowercase, accent-stripped, single-spaced — for fuzzy name matching. */
+    private function norm(string $s): string
+    {
+        return strtolower(preg_replace('/\s+/', ' ', trim(Str::ascii($s))));
     }
 
     /** @return array{0:string,1:?int} [stage key, matchday|null] */
