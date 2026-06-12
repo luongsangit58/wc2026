@@ -342,8 +342,13 @@ a.match-card:hover { border-color: var(--line); transform: translateY(-2px); box
 .lineup__head { display: flex; align-items: center; gap: 10px; font-family: var(--display); font-size: 18px; text-transform: uppercase; margin-bottom: 12px; }
 
 /* ---------- Knockout bracket -------------------------------------------- */
-.bracket { display: flex; gap: 20px; overflow-x: auto; padding: 6px 2px 18px; }
-.bracket__round { min-width: 224px; display: flex; flex-direction: column; gap: 12px; justify-content: space-around; }
+.bracket { display: flex; gap: 14px; overflow-x: auto; padding: 6px 2px 16px; scrollbar-width: thin; scrollbar-color: var(--line) var(--surface-2); }
+.bracket::-webkit-scrollbar { height: 9px; }
+.bracket::-webkit-scrollbar-track { background: var(--surface-2); border-radius: 999px; }
+.bracket::-webkit-scrollbar-thumb { background: var(--line); border-radius: 999px; }
+.bracket::-webkit-scrollbar-thumb:hover { background: var(--surface-3); }
+/* rounds flex to fill the container on desktop (no scroll); shrink to 176px min on small screens */
+.bracket__round { flex: 1 1 176px; min-width: 176px; display: flex; flex-direction: column; gap: 12px; justify-content: space-around; }
 .bracket__round-title { font-family: var(--display); text-transform: uppercase; letter-spacing: 1px; font-size: 13.5px; color: var(--text-2); text-align: center; padding-bottom: 8px; margin-bottom: 4px; border-bottom: 1px solid var(--line-soft); }
 .bracket__match { display: flex; flex-direction: column; gap: 7px; background: var(--surface); border: 1px solid var(--line-soft); border-radius: var(--radius-sm); padding: 11px 13px; transition: .15s; }
 a.bracket__match:hover { border-color: var(--primary); transform: translateY(-2px); }
