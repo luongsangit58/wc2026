@@ -341,24 +341,22 @@ a.match-card:hover { border-color: var(--line); transform: translateY(-2px); box
 .lineups { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
 .lineup__head { display: flex; align-items: center; gap: 10px; font-family: var(--display); font-size: 18px; text-transform: uppercase; margin-bottom: 12px; }
 
-/* ---------- Knockout bracket -------------------------------------------- */
-.bracket { display: flex; gap: 14px; overflow-x: auto; padding: 6px 2px 16px; scrollbar-width: thin; scrollbar-color: var(--line) var(--surface-2); }
-.bracket::-webkit-scrollbar { height: 9px; }
-.bracket::-webkit-scrollbar-track { background: var(--surface-2); border-radius: 999px; }
-.bracket::-webkit-scrollbar-thumb { background: var(--line); border-radius: 999px; }
-.bracket::-webkit-scrollbar-thumb:hover { background: var(--surface-3); }
-/* rounds flex to fill the container on desktop (no scroll); shrink to 176px min on small screens */
-.bracket__round { flex: 1 1 176px; min-width: 176px; display: flex; flex-direction: column; gap: 12px; justify-content: space-around; }
-.bracket__round-title { font-family: var(--display); text-transform: uppercase; letter-spacing: 1px; font-size: 13.5px; color: var(--text-2); text-align: center; padding-bottom: 8px; margin-bottom: 4px; border-bottom: 1px solid var(--line-soft); }
+/* ---------- Knockout bracket (stacked rounds, fully responsive) --------- */
+.bracket-rounds { display: flex; flex-direction: column; gap: 30px; }
+.bracket-round__head { display: flex; align-items: baseline; gap: 12px; margin-bottom: 14px; padding-bottom: 9px; border-bottom: 1px solid var(--line-soft); }
+.bracket-round__title { font-family: var(--display); text-transform: uppercase; letter-spacing: 1px; font-size: 19px; color: var(--text); }
+.bracket-round__count { font-size: 12.5px; color: var(--muted); }
+.bracket-round__grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(232px, 1fr)); gap: 12px; }
 .bracket__match { display: flex; flex-direction: column; gap: 7px; background: var(--surface); border: 1px solid var(--line-soft); border-radius: var(--radius-sm); padding: 11px 13px; transition: .15s; }
 a.bracket__match:hover { border-color: var(--primary); transform: translateY(-2px); }
 .bracket__team { display: flex; align-items: center; gap: 9px; font-size: 13.5px; }
-.bracket__team-flag { font-size: 18px; }
-.bracket__team-name { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: 600; }
+.bracket__team-flag { font-size: 18px; flex: none; }
+.bracket__team-name { flex: 1; font-weight: 600; line-height: 1.25; min-width: 0; }
 .bracket__team--tbd .bracket__team-name { color: var(--muted); font-weight: 500; font-style: italic; }
 .bracket__team--winner .bracket__team-name { color: var(--primary); }
-.bracket__score { font-family: var(--display); font-size: 15px; min-width: 16px; text-align: right; color: var(--text); }
+.bracket__score { font-family: var(--display); font-size: 15px; min-width: 16px; text-align: right; color: var(--text); flex: none; }
 .bracket__meta { font-size: 11px; color: var(--muted); border-top: 1px solid var(--line-soft); padding-top: 7px; display: flex; gap: 10px; flex-wrap: wrap; }
+.empty-state--inline { grid-column: 1 / -1; padding: 26px 0; }
 .bracket-final { margin-top: 24px; }
 
 /* ---------- Venues ------------------------------------------------------ */

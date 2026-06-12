@@ -22,35 +22,41 @@
             <p class="page-head__sub">32 teams, single elimination — from the Round of 32 (June 28) to the Final on July 19, 2026.</p>
         </div>
 
-        <div class="bracket">
+        <div class="bracket-rounds">
             @foreach ($stageOrder as $stage)
-                <div class="bracket__round">
-                    <div class="bracket__round-title">{{ $labels[$stage] ?? $stage }}</div>
-                    @forelse ($rounds[$stage] ?? [] as $f)
-                        @php
-                            $t1win = $f->is_finished && $f->team1_score > $f->team2_score;
-                            $t2win = $f->is_finished && $f->team2_score > $f->team1_score;
-                        @endphp
-                        <a class="bracket__match" href="{{ route('fixtures.show', $f) }}">
-                            <div class="bracket__team {{ $f->team1 ? '' : 'bracket__team--tbd' }} {{ $t1win ? 'bracket__team--winner' : '' }}">
-                                <span class="bracket__team-flag">{{ $f->team1?->flag_emoji ?? '🏳️' }}</span>
-                                <span class="bracket__team-name">{{ $f->team1_label }}</span>
-                                <span class="bracket__score">{{ $f->has_score ? $f->team1_score : '' }}</span>
-                            </div>
-                            <div class="bracket__team {{ $f->team2 ? '' : 'bracket__team--tbd' }} {{ $t2win ? 'bracket__team--winner' : '' }}">
-                                <span class="bracket__team-flag">{{ $f->team2?->flag_emoji ?? '🏳️' }}</span>
-                                <span class="bracket__team-name">{{ $f->team2_label }}</span>
-                                <span class="bracket__score">{{ $f->has_score ? $f->team2_score : '' }}</span>
-                            </div>
-                            <div class="bracket__meta">
-                                <span>{{ $f->match_date->format('j M') }}</span>
-                                @if ($f->venue)<span>{{ $f->venue->city }}</span>@endif
-                            </div>
-                        </a>
-                    @empty
-                        <p class="muted">TBD</p>
-                    @endforelse
-                </div>
+                @php $matches = $rounds[$stage] ?? collect(); @endphp
+                <section class="bracket-round">
+                    <div class="bracket-round__head">
+                        <h2 class="bracket-round__title">{{ $labels[$stage] ?? $stage }}</h2>
+                        <span class="bracket-round__count">{{ $matches->count() }} {{ \Illuminate\Support\Str::plural('match', $matches->count()) }}</span>
+                    </div>
+                    <div class="bracket-round__grid">
+                        @forelse ($matches as $f)
+                            @php
+                                $t1win = $f->is_finished && $f->team1_score > $f->team2_score;
+                                $t2win = $f->is_finished && $f->team2_score > $f->team1_score;
+                            @endphp
+                            <a class="bracket__match" href="{{ route('fixtures.show', $f) }}">
+                                <div class="bracket__team {{ $f->team1 ? '' : 'bracket__team--tbd' }} {{ $t1win ? 'bracket__team--winner' : '' }}">
+                                    <span class="bracket__team-flag">{{ $f->team1?->flag_emoji ?? '🏳️' }}</span>
+                                    <span class="bracket__team-name">{{ $f->team1_label }}</span>
+                                    <span class="bracket__score">{{ $f->has_score ? $f->team1_score : '' }}</span>
+                                </div>
+                                <div class="bracket__team {{ $f->team2 ? '' : 'bracket__team--tbd' }} {{ $t2win ? 'bracket__team--winner' : '' }}">
+                                    <span class="bracket__team-flag">{{ $f->team2?->flag_emoji ?? '🏳️' }}</span>
+                                    <span class="bracket__team-name">{{ $f->team2_label }}</span>
+                                    <span class="bracket__score">{{ $f->has_score ? $f->team2_score : '' }}</span>
+                                </div>
+                                <div class="bracket__meta">
+                                    <span>{{ $f->match_date->format('j M') }}</span>
+                                    @if ($f->venue)<span>{{ $f->venue->city }}</span>@endif
+                                </div>
+                            </a>
+                        @empty
+                            <div class="empty-state empty-state--inline"><span class="empty-state__icon">🗓️</span><p>Fixtures to be confirmed.</p></div>
+                        @endforelse
+                    </div>
+                </section>
             @endforeach
         </div>
 
