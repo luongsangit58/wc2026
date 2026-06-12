@@ -3,6 +3,10 @@
 @section('title', $team->display_name)
 @section('meta_description', $team->display_name . ' at the FIFA World Cup 2026 — squad, fixtures, group standings, confederation and FIFA code.')
 
+@php
+    $positionLabels = ['GK' => 'Goalkeepers', 'DF' => 'Defenders', 'MF' => 'Midfielders', 'FW' => 'Forwards'];
+@endphp
+
 @section('content')
 <section class="section">
     <div class="container">
@@ -17,15 +21,9 @@
             <div>
                 <h1 class="team-hero__name">{{ $team->display_name }}</h1>
                 <div class="team-hero__tags">
-                    @if($team->group)
-                        <span class="pill">{{ $team->group->name }}</span>
-                    @endif
-                    @if($team->confederation)
-                        <span class="pill">{{ $team->confederation }}</span>
-                    @endif
-                    @if($team->continent)
-                        <span class="pill">{{ $team->continent }}</span>
-                    @endif
+                    @if($team->group)<span class="pill">{{ $team->group->name }}</span>@endif
+                    @if($team->confederation)<span class="pill">{{ $team->confederation }}</span>@endif
+                    @if($team->continent)<span class="pill">{{ $team->continent }}</span>@endif
                     <span class="pill">FIFA: {{ $team->fifa_code }}</span>
                     <span class="pill">{{ $team->players->count() }} players</span>
                 </div>
@@ -34,34 +32,28 @@
     </div>
 </section>
 
+{{-- Matches + group table --}}
 <section class="section section--tight">
     <div class="container">
         <div class="grid grid--sidebar">
             <div>
-                <div class="section__head">
-                    <h2 class="section__title">Matches</h2>
-                </div>
+                <div class="section__head"><h2 class="section__title">Matches</h2></div>
 
                 @forelse($fixtures as $f)
-                    @php
-                        $href = $f->venue ? null : null;
-                    @endphp
-                    <article class="match-card">
+                    <a class="match-card" href="{{ route('fixtures.show', $f) }}">
                         <div class="match-card__top">
                             @if($f->group)
-                                <span class="match-card__stage badge badge--group">{{ $f->group->name }}</span>
+                                <span class="badge badge--group">{{ $f->group->name }}</span>
                             @else
-                                <span class="match-card__stage badge badge--stage">{{ $f->stage_label }}</span>
+                                <span class="badge badge--stage">{{ $f->stage_label }}</span>
                             @endif
-                            <span class="match-card__status">
-                                @if($f->is_live)
-                                    <span class="badge badge--live">Live</span>
-                                @elseif($f->is_finished)
-                                    <span class="badge badge--finished">Finished</span>
-                                @else
-                                    <span class="badge badge--scheduled">Scheduled</span>
-                                @endif
-                            </span>
+                            @if($f->is_live)
+                                <span class="badge badge--live">Live</span>
+                            @elseif($f->is_finished)
+                                <span class="badge badge--finished">FT</span>
+                            @else
+                                <span class="badge badge--scheduled">Scheduled</span>
+                            @endif
                         </div>
 
                         <div class="match-card__teams">
@@ -69,9 +61,8 @@
                                 <span class="match-card__flag">{{ $f->team1?->flag_emoji ?? '🏳️' }}</span>
                                 <span class="match-card__name @if($f->team1 && $f->team1->id === $team->id) accent @endif @unless($f->team1) match-card__name--tbd @endunless">{{ $f->team1_label }}</span>
                             </div>
-
                             <div class="match-card__mid">
-                                @if($f->is_finished && $f->team1_score !== null && $f->team2_score !== null)
+                                @if($f->has_score)
                                     <span class="match-card__score">{{ $f->team1_score }} – {{ $f->team2_score }}</span>
                                 @else
                                     <span class="match-card__time">
@@ -80,7 +71,6 @@
                                     </span>
                                 @endif
                             </div>
-
                             <div class="match-card__team match-card__team--away">
                                 <span class="match-card__flag">{{ $f->team2?->flag_emoji ?? '🏳️' }}</span>
                                 <span class="match-card__name @if($f->team2 && $f->team2->id === $team->id) accent @endif @unless($f->team2) match-card__name--tbd @endunless">{{ $f->team2_label }}</span>
@@ -89,71 +79,24 @@
 
                         <div class="match-card__meta">
                             <span>{{ $f->match_date->format('D, j M') }}</span>
-                            @if($f->venue)
-                                <span>{{ $f->venue->name }}</span>
-                                <span>{{ $f->venue->city }}</span>
-                            @endif
+                            @if($f->venue)<span>{{ $f->venue->name }}, {{ $f->venue->city }}</span>@endif
                         </div>
-                    </article>
+                    </a>
                 @empty
-                    <div class="empty-state">
-                        <span class="empty-state__icon">⚽</span>
-                        <p>No fixtures scheduled.</p>
-                    </div>
-                @endforelse
-
-                <div class="section__head">
-                    <h2 class="section__title">Squad</h2>
-                </div>
-
-                @php
-                    $positionLabels = ['GK' => 'Goalkeepers', 'DF' => 'Defenders', 'MF' => 'Midfielders', 'FW' => 'Forwards'];
-                @endphp
-
-                @forelse($squadByPosition as $pos => $players)
-                    <div class="squad-group">
-                        <h3 class="squad-group__label">{{ $positionLabels[$pos] ?? $pos }}</h3>
-                        <div class="squad-list">
-                            @foreach($players as $p)
-                                <div class="player js-player" data-player-id="{{ $p->id }}" role="button" tabindex="0">
-                                    @include('partials.avatar', ['player' => $p, 'size' => 'avatar--sm'])
-                                    <span class="player__num">{{ $p->number ?? '—' }}</span>
-                                    <span class="player__name">{{ $p->name }}</span>
-                                    <span class="player__pos">{{ $p->position }}</span>
-                                </div>
-                            @endforeach
-                        </div>
-                    </div>
-                @empty
-                    <div class="empty-state">
-                        <span class="empty-state__icon">👥</span>
-                        <p>Squad not yet announced.</p>
-                    </div>
+                    <div class="empty-state"><span class="empty-state__icon">⚽</span><p>No fixtures scheduled.</p></div>
                 @endforelse
             </div>
 
             <aside>
                 @if($team->group)
                     <div class="standings-card">
-                        <div class="standings-card__head">
-                            <h2 class="standings-card__title">{{ $team->group->name }} table</h2>
-                        </div>
+                        <div class="standings-card__head"><h2 class="standings-card__title">{{ $team->group->name }} table</h2></div>
                         <table class="table">
-                            <thead>
-                                <tr>
-                                    <th>#</th>
-                                    <th>Team</th>
-                                    <th>P</th>
-                                    <th>GD</th>
-                                    <th>Pts</th>
-                                </tr>
-                            </thead>
+                            <thead><tr><th>#</th><th>Team</th><th>P</th><th>GD</th><th>Pts</th></tr></thead>
                             <tbody>
                                 @forelse($groupRows as $row)
                                     <tr @class(['is-qualifying' => $row->team->id === $team->id])>
-                                        <td>
-                                            <span class="pos {{ $row->qualifying ? 'pos--qual' : '' }}">{{ $row->rank }}</span>
-                                        </td>
+                                        <td><span class="pos {{ $row->qualifying ? 'pos--qual' : '' }}">{{ $row->rank }}</span></td>
                                         <td>
                                             <a class="team-cell" href="{{ route('teams.show', $row->team) }}">
                                                 <span class="team-cell__flag">{{ $row->team->flag_emoji }}</span>
@@ -165,17 +108,49 @@
                                         <td class="pts">{{ $row->points }}</td>
                                     </tr>
                                 @empty
-                                    <tr>
-                                        <td colspan="5" class="muted">No standings available.</td>
-                                    </tr>
+                                    <tr><td colspan="5" class="muted">No standings available.</td></tr>
                                 @endforelse
                             </tbody>
                         </table>
-                        <div class="legend">
-                            <span><i class="pos--qual"></i> Top two qualify for the knockout stage</span>
-                        </div>
+                        <div class="legend"><span><i class="pos--qual"></i> Top two qualify for the knockout stage</span></div>
                     </div>
                 @endif
+            </aside>
+        </div>
+    </div>
+</section>
+
+{{-- Squad: master (left) + detail panel (right), click a player to load it --}}
+<section class="section">
+    <div class="container">
+        <div class="section__head"><h2 class="section__title">Squad</h2></div>
+
+        <div class="grid grid--sidebar">
+            <div>
+                @forelse($squadByPosition as $pos => $players)
+                    <div class="squad-group">
+                        <h3 class="squad-group__label">{{ $positionLabels[$pos] ?? $pos }}</h3>
+                        <div class="squad-grid">
+                            @foreach($players as $p)
+                                <div class="sqd js-player-detail" data-player-id="{{ $p->id }}" role="button" tabindex="0" aria-label="{{ $p->name }}">
+                                    @include('partials.avatar', ['player' => $p])
+                                    <div class="sqd__info">
+                                        <div class="sqd__name">{{ $p->name }}</div>
+                                        <div class="sqd__meta"><b>#{{ $p->number ?? '—' }}</b> · {{ $p->position_label }}</div>
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
+                    </div>
+                @empty
+                    <div class="empty-state"><span class="empty-state__icon">👥</span><p>Squad not yet announced.</p></div>
+                @endforelse
+            </div>
+
+            <aside>
+                <div class="player-detail" data-player-detail>
+                    <p class="player-detail__hint">👈 Select a player to see their photo &amp; stats</p>
+                </div>
             </aside>
         </div>
     </div>

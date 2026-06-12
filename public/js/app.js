@@ -99,55 +99,53 @@
         }, 1000);
     }
 
-    /* ---- Player card modal -------------------------------------------- */
-    // Click any [.js-player][data-player-id] to open a card with photo + stats.
+    /* ---- Player cards (shared) ---------------------------------------- */
+    function esc(s) {
+        return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
+            return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+        });
+    }
+
+    // One vertical card used by both the modal and the squad side-panel.
+    function playerCardHTML(d) {
+        var photo = d.photo
+            ? '<img class="avatar avatar--xl" src="' + esc(d.photo) + '" alt="">'
+            : '<span class="avatar avatar--initials avatar--xl">' + esc(d.initials || '?') + '</span>';
+        function stat(label, val) {
+            return '<div class="player-card__stat"><span class="player-card__stat-val">' +
+                (val === null || val === undefined || val === '' ? '—' : esc(val)) +
+                '</span><span class="player-card__stat-label">' + label + '</span></div>';
+        }
+        return '<div class="player-card">' +
+            '<div class="player-card__photo">' + photo + '</div>' +
+            (d.number ? '<div class="player-card__num">#' + esc(d.number) + '</div>' : '') +
+            '<h3 class="player-card__name">' + esc(d.name) + '</h3>' +
+            '<div class="player-card__team">' + esc(d.team_flag || '') + ' ' + esc(d.team || '') + '</div>' +
+            '<div class="player-card__stats">' +
+                stat('Position', d.position_label || d.position) +
+                stat('Age', d.age) +
+                stat('Goals', d.goals) +
+                stat('Assists', d.assists) +
+                stat('Rating', d.rating) +
+            '</div>' +
+            (d.dob ? '<p class="player-card__dob muted">Born ' + esc(d.dob) + '</p>' : '') +
+            (d.team_slug ? '<a class="btn btn--ghost btn--sm" href="/teams/' + esc(d.team_slug) + '">View team →</a>' : '');
+    }
+
+    function loadPlayer(id) {
+        return fetch('/players/' + encodeURIComponent(id), { headers: { Accept: 'application/json' } })
+            .then(function (r) { return r.json(); });
+    }
+
+    /* ---- Modal (home leaderboards, match line-ups) -------------------- */
     var modal = document.querySelector('[data-player-modal]');
     if (modal) {
         var pmBody = modal.querySelector('[data-pm-body]');
+        var pmOpen = function () { modal.hidden = false; document.body.style.overflow = 'hidden'; };
+        var pmClose = function () { modal.hidden = true; document.body.style.overflow = ''; };
 
-        function pmOpen() { modal.hidden = false; document.body.style.overflow = 'hidden'; }
-        function pmClose() { modal.hidden = true; document.body.style.overflow = ''; }
-
-        modal.querySelectorAll('[data-pmodal-close]').forEach(function (el) {
-            el.addEventListener('click', pmClose);
-        });
-        document.addEventListener('keydown', function (e) {
-            if (e.key === 'Escape' && !modal.hidden) pmClose();
-        });
-
-        function esc(s) {
-            return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
-                return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
-            });
-        }
-
-        function pmRender(d) {
-            var avatar = d.photo
-                ? '<img class="avatar" src="' + esc(d.photo) + '" alt="">'
-                : '<span class="avatar avatar--initials">' + esc(d.initials || '?') + '</span>';
-            function stat(label, val) {
-                return '<div class="pmodal__stat"><span class="pmodal__stat-val">' +
-                    (val === null || val === undefined || val === '' ? '—' : esc(val)) +
-                    '</span><span class="pmodal__stat-label">' + label + '</span></div>';
-            }
-            pmBody.innerHTML =
-                '<div class="pmodal__head">' + avatar +
-                    '<div class="pmodal__id">' +
-                        (d.number ? '<div class="pmodal__num">#' + esc(d.number) + '</div>' : '') +
-                        '<h3 class="pmodal__name">' + esc(d.name) + '</h3>' +
-                        '<div class="pmodal__team">' + esc(d.team_flag || '') + ' ' + esc(d.team || '') + '</div>' +
-                    '</div>' +
-                '</div>' +
-                '<div class="pmodal__stats">' +
-                    stat('Position', d.position_label || d.position) +
-                    stat('Age', d.age) +
-                    stat('Goals', d.goals) +
-                    stat('Assists', d.assists) +
-                    stat('Rating', d.rating) +
-                '</div>' +
-                (d.dob ? '<p class="pmodal__meta muted">Born ' + esc(d.dob) + '</p>' : '') +
-                (d.team_slug ? '<a class="btn btn--ghost btn--sm" href="/teams/' + esc(d.team_slug) + '">View team →</a>' : '');
-        }
+        modal.querySelectorAll('[data-pmodal-close]').forEach(function (el) { el.addEventListener('click', pmClose); });
+        document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !modal.hidden) pmClose(); });
 
         document.querySelectorAll('.js-player[data-player-id]').forEach(function (el) {
             function go() {
@@ -155,15 +153,32 @@
                 if (!id) return;
                 pmBody.innerHTML = '<p class="muted" style="padding:40px;text-align:center">Loading…</p>';
                 pmOpen();
-                fetch('/players/' + encodeURIComponent(id), { headers: { Accept: 'application/json' } })
-                    .then(function (r) { return r.json(); })
-                    .then(pmRender)
+                loadPlayer(id).then(function (d) { pmBody.innerHTML = playerCardHTML(d); })
                     .catch(function () { pmBody.innerHTML = '<p class="muted" style="padding:40px;text-align:center">Could not load player.</p>'; });
             }
             el.addEventListener('click', go);
-            el.addEventListener('keydown', function (e) {
-                if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); go(); }
-            });
+            el.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); go(); } });
         });
+    }
+
+    /* ---- Squad side-panel (team profile) ------------------------------ */
+    var detail = document.querySelector('[data-player-detail]');
+    if (detail) {
+        var cards = Array.prototype.slice.call(document.querySelectorAll('.js-player-detail[data-player-id]'));
+        function showInPanel(el, scroll) {
+            var id = el.getAttribute('data-player-id');
+            if (!id) return;
+            cards.forEach(function (c) { c.classList.remove('is-active'); });
+            el.classList.add('is-active');
+            detail.innerHTML = '<p class="muted" style="padding:40px;text-align:center">Loading…</p>';
+            if (scroll && window.innerWidth <= 900) detail.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            loadPlayer(id).then(function (d) { detail.innerHTML = playerCardHTML(d); })
+                .catch(function () { detail.innerHTML = '<p class="muted" style="padding:40px;text-align:center">Could not load player.</p>'; });
+        }
+        cards.forEach(function (el) {
+            el.addEventListener('click', function () { showInPanel(el, true); });
+            el.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); showInPanel(el, true); } });
+        });
+        if (cards.length) showInPanel(cards[0], false); // auto-load first player
     }
 })();
