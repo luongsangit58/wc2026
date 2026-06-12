@@ -10,6 +10,7 @@ class Player extends Model
     protected $fillable = [
         'team_id', 'number', 'position', 'name',
         'date_of_birth', 'goals', 'assists', 'rating', 'photo_url',
+        'club', 'club_nat', 'caps', 'intl_goals',
     ];
 
     protected $casts = [
@@ -17,6 +18,8 @@ class Player extends Model
         'goals' => 'integer',
         'assists' => 'integer',
         'rating' => 'decimal:1',
+        'caps' => 'integer',
+        'intl_goals' => 'integer',
     ];
 
     public function team(): BelongsTo

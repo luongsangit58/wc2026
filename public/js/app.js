@@ -116,20 +116,37 @@
                 (val === null || val === undefined || val === '' ? '—' : esc(val)) +
                 '</span><span class="player-card__stat-label">' + label + '</span></div>';
         }
+        // Identity rows: nationality (+ group) and current club.
+        var nat = '<div class="player-card__row"><span class="player-card__row-ic">' + esc(d.team_flag || '🏳️') + '</span>' +
+            '<span>' + esc(d.team || '') + (d.group ? ' <span class="muted">· ' + esc(d.group) + '</span>' : '') + '</span></div>';
+        var club = d.club
+            ? '<div class="player-card__row"><span class="player-card__row-ic">🏟️</span><span>' + esc(d.club) +
+                (d.club_nat ? ' <span class="chip chip--xs">' + esc(d.club_nat) + '</span>' : '') + '</span></div>'
+            : '';
+        // Labels are injected (translated) by the layout; fall back to English.
+        var T = window.WCi18n || {};
+        // Highlight World Cup goals when the player has scored this tournament.
+        var wcGoals = '';
+        if (d.goals && d.goals > 0) {
+            var wcText = T.wcGoals
+                ? String(T.wcGoals).replace(':n', esc(d.goals))
+                : esc(d.goals) + ' goal' + (d.goals > 1 ? 's' : '') + ' at World Cup 2026';
+            wcGoals = '<div class="player-card__wc">⚽ ' + wcText + '</div>';
+        }
         return '<div class="player-card">' +
             '<div class="player-card__photo">' + photo + '</div>' +
             (d.number ? '<div class="player-card__num">#' + esc(d.number) + '</div>' : '') +
             '<h3 class="player-card__name">' + esc(d.name) + '</h3>' +
-            '<div class="player-card__team">' + esc(d.team_flag || '') + ' ' + esc(d.team || '') + '</div>' +
+            '<div class="player-card__rows">' + nat + club + '</div>' +
             '<div class="player-card__stats">' +
-                stat('Position', d.position_label || d.position) +
-                stat('Age', d.age) +
-                stat('Goals', d.goals) +
-                stat('Assists', d.assists) +
-                stat('Rating', d.rating) +
+                stat(T.position || 'Position', d.position_label || d.position) +
+                stat(T.age || 'Age', d.age) +
+                stat(T.caps || 'Caps', d.caps) +
+                stat(T.intlGoals || "Int'l goals", d.intl_goals) +
             '</div>' +
-            (d.dob ? '<p class="player-card__dob muted">Born ' + esc(d.dob) + '</p>' : '') +
-            (d.team_slug ? '<a class="btn btn--ghost btn--sm" href="/teams/' + esc(d.team_slug) + '">View team →</a>' : '');
+            wcGoals +
+            (d.dob ? '<p class="player-card__dob muted">' + (T.born || 'Born') + ' ' + esc(d.dob) + '</p>' : '') +
+            (d.team_slug ? '<a class="btn btn--ghost btn--sm" href="/teams/' + esc(d.team_slug) + '">' + (T.viewTeam || 'View team →') + '</a>' : '');
     }
 
     function loadPlayer(id) {

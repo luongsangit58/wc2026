@@ -8,8 +8,8 @@
     <div class="container">
         <div class="page-head">
             <div class="page-head__eyebrow">FIFA World Cup 2026</div>
-            <h1 class="page-head__title">Teams</h1>
-            <p class="page-head__sub">All {{ $teamCount }} qualified nations across 12 groups.</p>
+            <h1 class="page-head__title">{{ __('Teams') }}</h1>
+            <p class="page-head__sub">{{ __('All :count qualified nations across 12 groups.', ['count' => $teamCount]) }}</p>
         </div>
 
         <div class="grid grid--auto">
@@ -27,13 +27,13 @@
                             <span class="team-row__code">{{ $team->fifa_code }}</span>
                         </a>
                     @empty
-                        <p class="muted">No teams assigned yet.</p>
+                        <p class="muted">{{ __('No teams assigned yet.') }}</p>
                     @endforelse
                 </div>
             @empty
                 <div class="empty-state">
                     <div class="empty-state__icon">🏆</div>
-                    <p>No groups available yet. Check back soon.</p>
+                    <p>{{ __('No groups available yet. Check back soon.') }}</p>
                 </div>
             @endforelse
         </div>

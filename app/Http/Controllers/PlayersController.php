@@ -9,23 +9,26 @@ class PlayersController extends Controller
     /** JSON for the click-to-open player card modal. */
     public function show(Player $player)
     {
-        $player->loadMissing('team');
+        $player->loadMissing('team.group');
 
         return response()->json([
             'name' => $player->name,
             'number' => $player->number,
             'position' => $player->position,
-            'position_label' => $player->position_label,
+            'position_label' => __($player->position_label),
             'age' => $player->age,
             'dob' => $player->date_of_birth?->format('j M Y'),
-            'goals' => $player->goals,
-            'assists' => $player->assists,
-            'rating' => $player->rating !== null ? (float) $player->rating : null,
+            'club' => $player->club,
+            'club_nat' => $player->club_nat,
+            'caps' => $player->caps,
+            'intl_goals' => $player->intl_goals,
+            'goals' => $player->goals,                 // goals at World Cup 2026
             'photo' => $player->photo_url,
             'initials' => $player->initials,
             'team' => $player->team?->display_name,
             'team_flag' => $player->team?->flag_emoji,
             'team_slug' => $player->team?->slug,
+            'group' => $player->team?->group?->name,
         ]);
     }
 }

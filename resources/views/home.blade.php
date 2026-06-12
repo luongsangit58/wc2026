@@ -9,7 +9,7 @@
     <section class="hero">
         <div class="container">
             <div class="hero__card">
-                <div class="hero__label">⚽ NEXT KICK-OFF · {{ $featured->stage_label }}</div>
+                <div class="hero__label">⚽ {{ __('NEXT KICK-OFF') }} · {{ __($featured->stage_label) }}</div>
 
                 <div class="hero__match">
                     <div class="hero__team hero__team--home">
@@ -46,19 +46,19 @@
                     <div class="countdown" data-countdown="{{ $featured->kickoff_at->toIso8601String() }}">
                         <div class="countdown__unit">
                             <span class="countdown__num" data-cd="days">00</span>
-                            <span class="countdown__label">Days</span>
+                            <span class="countdown__label">{{ __('Days') }}</span>
                         </div>
                         <div class="countdown__unit">
                             <span class="countdown__num" data-cd="hours">00</span>
-                            <span class="countdown__label">Hours</span>
+                            <span class="countdown__label">{{ __('Hours') }}</span>
                         </div>
                         <div class="countdown__unit">
                             <span class="countdown__num" data-cd="minutes">00</span>
-                            <span class="countdown__label">Minutes</span>
+                            <span class="countdown__label">{{ __('Minutes') }}</span>
                         </div>
                         <div class="countdown__unit">
                             <span class="countdown__num" data-cd="seconds">00</span>
-                            <span class="countdown__label">Seconds</span>
+                            <span class="countdown__label">{{ __('Seconds') }}</span>
                         </div>
                     </div>
                 @endif
@@ -72,27 +72,27 @@
             <div class="stat-strip">
                 <div class="stat">
                     <span class="stat__num">48</span>
-                    <span class="stat__label">Teams</span>
+                    <span class="stat__label">{{ __('Teams') }}</span>
                 </div>
                 <div class="stat">
                     <span class="stat__num">{{ $totalCount }}</span>
-                    <span class="stat__label">Matches</span>
+                    <span class="stat__label">{{ __('Matches') }}</span>
                 </div>
                 <div class="stat">
                     <span class="stat__num">{{ $playedCount }}/{{ $totalCount }}</span>
-                    <span class="stat__label">Matches Played</span>
+                    <span class="stat__label">{{ __('Matches Played') }}</span>
                 </div>
                 <div class="stat">
                     <span class="stat__num">12</span>
-                    <span class="stat__label">Groups</span>
+                    <span class="stat__label">{{ __('Groups') }}</span>
                 </div>
                 <div class="stat">
                     <span class="stat__num">16</span>
-                    <span class="stat__label">Host Cities</span>
+                    <span class="stat__label">{{ __('Host Cities') }}</span>
                 </div>
                 <div class="stat">
                     <span class="stat__num">3</span>
-                    <span class="stat__label">Host Nations</span>
+                    <span class="stat__label">{{ __('Host Nations') }}</span>
                 </div>
             </div>
         </div>
@@ -102,17 +102,17 @@
     <section class="section">
         <div class="container">
             <div class="section__head">
-                <h2 class="section__title">Live Now</h2>
-                <a class="section__link" href="{{ route('fixtures.index') }}">View all scores →</a>
+                <h2 class="section__title">{{ __('Live Now') }}</h2>
+                <a class="section__link" href="{{ route('fixtures.index') }}">{{ __('View all scores →') }}</a>
             </div>
 
             @forelse($liveMatches as $match)
                 @if($loop->first)<div class="grid grid--2">@endif
                 <a class="match-card" href="{{ route('fixtures.show', $match) }}">
                     <div class="match-card__top">
-                        <span class="match-card__stage">{{ $match->stage_label }}</span>
+                        <span class="match-card__stage">{{ __($match->stage_label) }}</span>
                         <span class="match-card__status">
-                            <span class="badge badge--live">● LIVE</span>
+                            <span class="badge badge--live">● {{ __('LIVE') }}</span>
                         </span>
                     </div>
                     <div class="match-card__teams">
@@ -137,8 +137,8 @@
             @empty
                 <div class="empty-state">
                     <div class="empty-state__icon">⚽</div>
-                    <p>No matches live right now</p>
-                    <p class="muted">Check back during kick-off for live scores and updates.</p>
+                    <p>{{ __('No matches live right now') }}</p>
+                    <p class="muted">{{ __('Check back during kick-off for live scores and updates.') }}</p>
                 </div>
             @endforelse
         </div>
@@ -152,19 +152,19 @@
                 {{-- LEFT: Upcoming Matches --}}
                 <div>
                     <div class="section__head">
-                        <h2 class="section__title">Upcoming Matches</h2>
-                        <a class="section__link" href="{{ route('fixtures.index') }}">All fixtures →</a>
+                        <h2 class="section__title">{{ __('Upcoming Matches') }}</h2>
+                        <a class="section__link" href="{{ route('fixtures.index') }}">{{ __('All fixtures →') }}</a>
                     </div>
 
                     @forelse($upcoming as $f)
                         <a class="match-card" href="{{ route('fixtures.show', $f) }}">
                             <div class="match-card__top">
-                                <span class="match-card__stage">{{ $f->stage_label }}</span>
+                                <span class="match-card__stage">{{ __($f->stage_label) }}</span>
                                 <span class="match-card__status">
                                     @if($f->group)
                                         <span class="badge badge--group">{{ $f->group->name }}</span>
                                     @else
-                                        <span class="badge badge--stage">{{ $f->stage_label }}</span>
+                                        <span class="badge badge--stage">{{ __($f->stage_label) }}</span>
                                     @endif
                                 </span>
                             </div>
@@ -191,7 +191,7 @@
                     @empty
                         <div class="empty-state">
                             <div class="empty-state__icon">📅</div>
-                            <p>No upcoming matches scheduled</p>
+                            <p>{{ __('No upcoming matches scheduled') }}</p>
                         </div>
                     @endforelse
                 </div>
@@ -201,7 +201,7 @@
                     {{-- Top Scorers --}}
                     <div class="standings-card">
                         <div class="standings-card__head">
-                            <h3 class="standings-card__title">Top Scorers</h3>
+                            <h3 class="standings-card__title">{{ __('Top Scorers') }}</h3>
                         </div>
                         @forelse($topScorers as $i => $player)
                             @if($loop->first)<div class="leaderboard">@endif
@@ -218,7 +218,7 @@
                         @empty
                             <div class="empty-state">
                                 <div class="empty-state__icon">⚽</div>
-                                <p class="muted">No data yet — tournament in progress</p>
+                                <p class="muted">{{ __('No data yet — tournament in progress') }}</p>
                             </div>
                         @endforelse
                     </div>
@@ -226,7 +226,7 @@
                     {{-- Top Assists --}}
                     <div class="standings-card">
                         <div class="standings-card__head">
-                            <h3 class="standings-card__title">Top Assists</h3>
+                            <h3 class="standings-card__title">{{ __('Top Assists') }}</h3>
                         </div>
                         @forelse($topAssists as $player)
                             @if($loop->first)<div class="leaderboard">@endif
@@ -243,7 +243,7 @@
                         @empty
                             <div class="empty-state">
                                 <div class="empty-state__icon">🅰️</div>
-                                <p class="muted">No data yet — tournament in progress</p>
+                                <p class="muted">{{ __('No data yet — tournament in progress') }}</p>
                             </div>
                         @endforelse
                     </div>
@@ -251,7 +251,7 @@
                     {{-- Player Ratings --}}
                     <div class="standings-card">
                         <div class="standings-card__head">
-                            <h3 class="standings-card__title">Player Ratings</h3>
+                            <h3 class="standings-card__title">{{ __('Player Ratings') }}</h3>
                         </div>
                         @forelse($topRated as $player)
                             @if($loop->first)<div class="leaderboard">@endif
@@ -268,7 +268,7 @@
                         @empty
                             <div class="empty-state">
                                 <div class="empty-state__icon">⭐</div>
-                                <p class="muted">No data yet — tournament in progress</p>
+                                <p class="muted">{{ __('No data yet — tournament in progress') }}</p>
                             </div>
                         @endforelse
                     </div>
@@ -282,8 +282,8 @@
     <section class="section">
         <div class="container">
             <div class="section__head">
-                <h2 class="section__title">Group Standings</h2>
-                <a class="section__link" href="{{ route('standings.index') }}">Full standings →</a>
+                <h2 class="section__title">{{ __('Group Standings') }}</h2>
+                <a class="section__link" href="{{ route('standings.index') }}">{{ __('Full standings →') }}</a>
             </div>
 
             @forelse($standings as $entry)
@@ -296,10 +296,10 @@
                         <thead>
                             <tr>
                                 <th>#</th>
-                                <th>Team</th>
-                                <th>P</th>
-                                <th>GD</th>
-                                <th>Pts</th>
+                                <th>{{ __('Team') }}</th>
+                                <th>{{ __('P') }}</th>
+                                <th>{{ __('GD') }}</th>
+                                <th>{{ __('Pts') }}</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -324,7 +324,7 @@
             @empty
                 <div class="empty-state">
                     <div class="empty-state__icon">🏆</div>
-                    <p>Standings will appear once groups are drawn.</p>
+                    <p>{{ __('Standings will appear once groups are drawn.') }}</p>
                 </div>
             @endforelse
         </div>
@@ -334,14 +334,14 @@
     <section class="section">
         <div class="container">
             <div class="section__head">
-                <h2 class="section__title">Explore</h2>
+                <h2 class="section__title">{{ __('Explore') }}</h2>
             </div>
 
             <div class="quick-actions">
                 @foreach($quickActions as $action)
                     <a class="quick-action" href="{{ $action['url'] }}">
                         <span class="quick-action__icon">{{ $action['icon'] }}</span>
-                        <span class="quick-action__label">{{ $action['label'] }}</span>
+                        <span class="quick-action__label">{{ __($action['label']) }}</span>
                     </a>
                 @endforeach
             </div>

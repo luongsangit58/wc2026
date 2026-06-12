@@ -11,7 +11,7 @@
 <section class="section">
     <div class="container">
         <nav class="breadcrumb">
-            <a href="{{ route('teams.index') }}">Teams</a>
+            <a href="{{ route('teams.index') }}">{{ __('Teams') }}</a>
             <span aria-hidden="true">/</span>
             <span>{{ $team->display_name }}</span>
         </nav>
@@ -25,7 +25,7 @@
                     @if($team->confederation)<span class="pill">{{ $team->confederation }}</span>@endif
                     @if($team->continent)<span class="pill">{{ $team->continent }}</span>@endif
                     <span class="pill">FIFA: {{ $team->fifa_code }}</span>
-                    <span class="pill">{{ $team->players->count() }} players</span>
+                    <span class="pill">{{ __(':count players', ['count' => $team->players->count()]) }}</span>
                 </div>
             </div>
         </div>
@@ -37,7 +37,7 @@
     <div class="container">
         <div class="grid grid--sidebar">
             <div>
-                <div class="section__head"><h2 class="section__title">Matches</h2></div>
+                <div class="section__head"><h2 class="section__title">{{ __('Matches') }}</h2></div>
 
                 @forelse($fixtures as $f)
                     <a class="match-card" href="{{ route('fixtures.show', $f) }}">
@@ -45,14 +45,14 @@
                             @if($f->group)
                                 <span class="badge badge--group">{{ $f->group->name }}</span>
                             @else
-                                <span class="badge badge--stage">{{ $f->stage_label }}</span>
+                                <span class="badge badge--stage">{{ __($f->stage_label) }}</span>
                             @endif
                             @if($f->is_live)
-                                <span class="badge badge--live">Live</span>
+                                <span class="badge badge--live">{{ __('Live') }}</span>
                             @elseif($f->is_finished)
-                                <span class="badge badge--finished">FT</span>
+                                <span class="badge badge--finished">{{ __('FT') }}</span>
                             @else
-                                <span class="badge badge--scheduled">Scheduled</span>
+                                <span class="badge badge--scheduled">{{ __('Scheduled') }}</span>
                             @endif
                         </div>
 
@@ -83,16 +83,16 @@
                         </div>
                     </a>
                 @empty
-                    <div class="empty-state"><span class="empty-state__icon">⚽</span><p>No fixtures scheduled.</p></div>
+                    <div class="empty-state"><span class="empty-state__icon">⚽</span><p>{{ __('No fixtures scheduled.') }}</p></div>
                 @endforelse
             </div>
 
             <aside>
                 @if($team->group)
                     <div class="standings-card">
-                        <div class="standings-card__head"><h2 class="standings-card__title">{{ $team->group->name }} table</h2></div>
+                        <div class="standings-card__head"><h2 class="standings-card__title">{{ __(':group table', ['group' => $team->group->name]) }}</h2></div>
                         <table class="table">
-                            <thead><tr><th>#</th><th>Team</th><th>P</th><th>GD</th><th>Pts</th></tr></thead>
+                            <thead><tr><th>#</th><th>{{ __('Team') }}</th><th>{{ __('P') }}</th><th>{{ __('GD') }}</th><th>{{ __('Pts') }}</th></tr></thead>
                             <tbody>
                                 @forelse($groupRows as $row)
                                     <tr @class(['is-qualifying' => $row->team->id === $team->id])>
@@ -108,11 +108,11 @@
                                         <td class="pts">{{ $row->points }}</td>
                                     </tr>
                                 @empty
-                                    <tr><td colspan="5" class="muted">No standings available.</td></tr>
+                                    <tr><td colspan="5" class="muted">{{ __('No standings available.') }}</td></tr>
                                 @endforelse
                             </tbody>
                         </table>
-                        <div class="legend"><span><i class="pos--qual"></i> Top two qualify for the knockout stage</span></div>
+                        <div class="legend"><span><i class="pos--qual"></i> {{ __('Top two qualify for the knockout stage') }}</span></div>
                     </div>
                 @endif
             </aside>
@@ -123,13 +123,13 @@
 {{-- Squad: master (left) + detail panel (right), click a player to load it --}}
 <section class="section">
     <div class="container">
-        <div class="section__head"><h2 class="section__title">Squad</h2></div>
+        <div class="section__head"><h2 class="section__title">{{ __('Squad') }}</h2></div>
 
         <div class="grid grid--sidebar">
             <div>
                 @forelse($squadByPosition as $pos => $players)
                     <div class="squad-group">
-                        <h3 class="squad-group__label">{{ $positionLabels[$pos] ?? $pos }}</h3>
+                        <h3 class="squad-group__label">{{ __($positionLabels[$pos] ?? $pos) }}</h3>
                         <div class="squad-grid">
                             @foreach($players as $p)
                                 <div class="sqd js-player-detail" data-player-id="{{ $p->id }}" role="button" tabindex="0" aria-label="{{ $p->name }}">
@@ -143,13 +143,13 @@
                         </div>
                     </div>
                 @empty
-                    <div class="empty-state"><span class="empty-state__icon">👥</span><p>Squad not yet announced.</p></div>
+                    <div class="empty-state"><span class="empty-state__icon">👥</span><p>{{ __('Squad not yet announced.') }}</p></div>
                 @endforelse
             </div>
 
             <aside>
                 <div class="player-detail" data-player-detail>
-                    <p class="player-detail__hint">👈 Select a player to see their photo &amp; stats</p>
+                    <p class="player-detail__hint">{{ __('👈 Select a player to see their photo & stats') }}</p>
                 </div>
             </aside>
         </div>

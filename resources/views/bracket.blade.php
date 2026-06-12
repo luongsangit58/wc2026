@@ -17,9 +17,9 @@
 <section class="section">
     <div class="container">
         <div class="page-head">
-            <div class="page-head__eyebrow">Knockout Stage</div>
-            <h1 class="page-head__title">Bracket</h1>
-            <p class="page-head__sub">32 teams, single elimination — from the Round of 32 (June 28) to the Final on July 19, 2026.</p>
+            <div class="page-head__eyebrow">{{ __('Knockout Stage') }}</div>
+            <h1 class="page-head__title">{{ __('Bracket') }}</h1>
+            <p class="page-head__sub">{{ __('32 teams, single elimination — from the Round of 32 (June 28) to the Final on July 19, 2026.') }}</p>
         </div>
 
         <div class="bracket-rounds">
@@ -27,8 +27,8 @@
                 @php $matches = $rounds[$stage] ?? collect(); @endphp
                 <section class="bracket-round">
                     <div class="bracket-round__head">
-                        <h2 class="bracket-round__title">{{ $labels[$stage] ?? $stage }}</h2>
-                        <span class="bracket-round__count">{{ $matches->count() }} {{ \Illuminate\Support\Str::plural('match', $matches->count()) }}</span>
+                        <h2 class="bracket-round__title">{{ __($labels[$stage] ?? $stage) }}</h2>
+                        <span class="bracket-round__count">{{ __(':count matches', ['count' => $matches->count()]) }}</span>
                     </div>
                     <div class="bracket-round__grid">
                         @forelse ($matches as $f)
@@ -53,7 +53,7 @@
                                 </div>
                             </a>
                         @empty
-                            <div class="empty-state empty-state--inline"><span class="empty-state__icon">🗓️</span><p>Fixtures to be confirmed.</p></div>
+                            <div class="empty-state empty-state--inline"><span class="empty-state__icon">🗓️</span><p>{{ __('Fixtures to be confirmed.') }}</p></div>
                         @endforelse
                     </div>
                 </section>
@@ -62,11 +62,11 @@
 
         @if ($thirdPlace)
             <div class="bracket-final">
-                <div class="section__head"><h2 class="section__title">Third-place play-off</h2></div>
+                <div class="section__head"><h2 class="section__title">{{ __('Third-place play-off') }}</h2></div>
                 <div class="grid grid--2">
                     <a class="match-card" href="{{ route('fixtures.show', $thirdPlace) }}">
                         <div class="match-card__top">
-                            <span class="badge badge--stage">Third Place</span>
+                            <span class="badge badge--stage">{{ __('Third Place') }}</span>
                             <span class="badge badge--scheduled">{{ $thirdPlace->match_date->format('j M') }}</span>
                         </div>
                         <div class="match-card__teams">

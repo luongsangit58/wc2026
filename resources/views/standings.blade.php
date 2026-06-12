@@ -7,13 +7,13 @@
 <section class="section">
     <div class="container">
         <div class="page-head">
-            <div class="page-head__eyebrow">Group Stage</div>
-            <h1 class="page-head__title">Standings</h1>
-            <p class="page-head__sub">12 groups · top two of each group advance, plus the eight best third-placed teams.</p>
+            <div class="page-head__eyebrow">{{ __('Group Stage') }}</div>
+            <h1 class="page-head__title">{{ __('Standings') }}</h1>
+            <p class="page-head__sub">{{ __('12 groups · top two of each group advance, plus the eight best third-placed teams.') }}</p>
         </div>
 
         <div class="progress-strip section--tight">
-            <span class="pill">{{ $playedCount }}/{{ $groupTotal }} group matches played</span>
+            <span class="pill">{{ __(':played/:total group matches played', ['played' => $playedCount, 'total' => $groupTotal]) }}</span>
             <div class="progress">
                 <div class="progress__bar" style="width: {{ $groupTotal ? round($playedCount / $groupTotal * 100) : 0 }}%"></div>
             </div>
@@ -29,15 +29,15 @@
                         <thead>
                             <tr>
                                 <th>#</th>
-                                <th>Team</th>
-                                <th>P</th>
-                                <th>W</th>
-                                <th>D</th>
-                                <th>L</th>
-                                <th>GF</th>
-                                <th>GA</th>
-                                <th>GD</th>
-                                <th>Pts</th>
+                                <th>{{ __('Team') }}</th>
+                                <th>{{ __('P') }}</th>
+                                <th>{{ __('W') }}</th>
+                                <th>{{ __('D') }}</th>
+                                <th>{{ __('L') }}</th>
+                                <th>{{ __('GF') }}</th>
+                                <th>{{ __('GA') }}</th>
+                                <th>{{ __('GD') }}</th>
+                                <th>{{ __('Pts') }}</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -63,7 +63,7 @@
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="10" class="muted">No teams in this group yet.</td>
+                                    <td colspan="10" class="muted">{{ __('No teams in this group yet.') }}</td>
                                 </tr>
                             @endforelse
                         </tbody>
@@ -72,13 +72,13 @@
             @empty
                 <div class="empty-state">
                     <div class="empty-state__icon">🏆</div>
-                    <p>Standings are not available yet.</p>
+                    <p>{{ __('Standings are not available yet.') }}</p>
                 </div>
             @endforelse
         </div>
 
         <div class="legend">
-            <span><i class="legend__swatch" style="background: var(--primary)"></i> Advance to knockout stage</span>
+            <span><i class="legend__swatch" style="background: var(--primary)"></i> {{ __('Advance to knockout stage') }}</span>
         </div>
     </div>
 </section>

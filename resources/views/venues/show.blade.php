@@ -5,29 +5,29 @@
 @section('content')
 <section class="section">
     <div class="container">
-        <div class="breadcrumb"><a href="{{ route('venues.index') }}">Venues</a> / {{ $venue->city }}</div>
+        <div class="breadcrumb"><a href="{{ route('venues.index') }}">{{ __('Venues') }}</a> / {{ $venue->city }}</div>
 
         <div class="page-head">
             <div class="page-head__eyebrow">{{ $venue->country_flag }} {{ $venue->city }}</div>
             <h1 class="page-head__title">{{ $venue->name }}</h1>
             <div class="team-hero__tags">
-                @if ($venue->capacity)<span class="pill">🪑 {{ number_format($venue->capacity) }} capacity</span>@endif
+                @if ($venue->capacity)<span class="pill">🪑 {{ number_format($venue->capacity) }} {{ __('capacity') }}</span>@endif
                 @if ($venue->timezone)<span class="pill">🕓 {{ $venue->timezone }}</span>@endif
-                <span class="pill">⚽ {{ $fixtures->count() }} matches hosted</span>
+                <span class="pill">⚽ {{ $fixtures->count() }} {{ __('matches hosted') }}</span>
             </div>
         </div>
 
-        <div class="section__head"><h2 class="section__title">Matches at this venue</h2></div>
+        <div class="section__head"><h2 class="section__title">{{ __('Matches at this venue') }}</h2></div>
 
         <div class="grid grid--2">
             @forelse ($fixtures as $f)
                 <a class="match-card" href="{{ route('fixtures.show', $f) }}">
                     <div class="match-card__top">
-                        <span class="badge badge--stage">{{ $f->stage_label }}@if ($f->group) · {{ $f->group->name }}@endif</span>
+                        <span class="badge badge--stage">{{ __($f->stage_label) }}@if ($f->group) · {{ $f->group->name }}@endif</span>
                         @if ($f->is_live)
-                            <span class="badge badge--live">LIVE</span>
+                            <span class="badge badge--live">{{ __('LIVE') }}</span>
                         @elseif ($f->is_finished)
-                            <span class="badge badge--finished">FT</span>
+                            <span class="badge badge--finished">{{ __('FT') }}</span>
                         @else
                             <span class="badge badge--scheduled">{{ $f->match_date->format('j M') }}</span>
                         @endif
@@ -53,7 +53,7 @@
                     </div>
                 </a>
             @empty
-                <div class="empty-state"><div class="empty-state__icon">🏟️</div><p>No matches scheduled here.</p></div>
+                <div class="empty-state"><div class="empty-state__icon">🏟️</div><p>{{ __('No matches scheduled here.') }}</p></div>
             @endforelse
         </div>
     </div>

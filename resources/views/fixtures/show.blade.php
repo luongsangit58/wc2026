@@ -10,18 +10,18 @@
 <section class="match-hero">
     <div class="container">
         <div class="breadcrumb">
-            <a href="{{ route('fixtures.index') }}">Fixtures</a> / {{ $fixture->round_label }}
+            <a href="{{ route('fixtures.index') }}">{{ __('Fixtures') }}</a> / {{ $fixture->round_label }}
         </div>
 
         <div class="match-hero__card">
             <div class="match-hero__top">
-                <span class="badge badge--stage">{{ $fixture->stage_label }}@if ($fixture->group) · {{ $fixture->group->name }}@endif</span>
+                <span class="badge badge--stage">{{ __($fixture->stage_label) }}@if ($fixture->group) · {{ $fixture->group->name }}@endif</span>
                 @if ($fixture->is_live)
-                    <span class="badge badge--live">LIVE @if ($fixture->live_minute)· {{ $fixture->live_minute }}'@endif</span>
+                    <span class="badge badge--live">{{ __('LIVE') }} @if ($fixture->live_minute)· {{ $fixture->live_minute }}'@endif</span>
                 @elseif ($fixture->is_finished)
-                    <span class="badge badge--finished">Full time</span>
+                    <span class="badge badge--finished">{{ __('Full time') }}</span>
                 @else
-                    <span class="badge badge--scheduled">Upcoming</span>
+                    <span class="badge badge--scheduled">{{ __('Upcoming') }}</span>
                 @endif
             </div>
 
@@ -62,7 +62,7 @@
                 @if ($fixture->venue)
                     <span>📍 <a href="{{ route('venues.show', $fixture->venue) }}"><b>{{ $fixture->venue->name }}</b>, {{ $fixture->venue->city }}</a></span>
                 @endif
-                @if ($fixture->num)<span>Match <b>#{{ $fixture->num }}</b></span>@endif
+                @if ($fixture->num)<span>{{ __('Match') }} <b>#{{ $fixture->num }}</b></span>@endif
             </div>
         </div>
     </div>
@@ -73,11 +73,11 @@
         <div class="container">
             <div class="standings-card">
                 <div class="standings-card__head">
-                    <span class="standings-card__title">{{ $fixture->group->name }} table</span>
+                    <span class="standings-card__title">{{ __(':group table', ['group' => $fixture->group->name]) }}</span>
                 </div>
                 <table class="table">
                     <thead>
-                        <tr><th>#</th><th>Team</th><th>P</th><th>W</th><th>D</th><th>L</th><th>GF</th><th>GA</th><th>GD</th><th>Pts</th></tr>
+                        <tr><th>#</th><th>{{ __('Team') }}</th><th>{{ __('P') }}</th><th>{{ __('W') }}</th><th>{{ __('D') }}</th><th>{{ __('L') }}</th><th>{{ __('GF') }}</th><th>{{ __('GA') }}</th><th>{{ __('GD') }}</th><th>{{ __('Pts') }}</th></tr>
                     </thead>
                     <tbody>
                         @foreach ($groupRows as $row)
@@ -110,7 +110,7 @@
 @if ($squad1->isNotEmpty() || $squad2->isNotEmpty())
     <section class="section">
         <div class="container">
-            <div class="section__head"><h2 class="section__title">Squads</h2></div>
+            <div class="section__head"><h2 class="section__title">{{ __('Squads') }}</h2></div>
             <div class="lineups">
                 @foreach ([[$fixture->team1, $squad1], [$fixture->team2, $squad2]] as [$team, $squad])
                     <div>
@@ -119,7 +119,7 @@
                             @foreach ($positions as $code => $label)
                                 @if (($squad[$code] ?? collect())->isNotEmpty())
                                     <div class="squad-group">
-                                        <div class="squad-group__label">{{ $label }}</div>
+                                        <div class="squad-group__label">{{ __($label) }}</div>
                                         <div class="squad-list">
                                             @foreach ($squad[$code] as $p)
                                                 <div class="player js-player" data-player-id="{{ $p->id }}" role="button" tabindex="0">
@@ -136,7 +136,7 @@
                                 @endif
                             @endforeach
                         @else
-                            <div class="empty-state"><div class="empty-state__icon">⏳</div><p>Team to be decided</p></div>
+                            <div class="empty-state"><div class="empty-state__icon">⏳</div><p>{{ __('Team to be decided') }}</p></div>
                         @endif
                     </div>
                 @endforeach

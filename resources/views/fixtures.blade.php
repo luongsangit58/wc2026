@@ -8,16 +8,16 @@
     <div class="container">
         <div class="page-head">
             <div class="page-head__eyebrow">FIFA World Cup 2026</div>
-            <h1 class="page-head__title">Fixtures</h1>
-            <p class="page-head__sub">All {{ $totalMatches }} matches · June 11 – July 19, 2026</p>
+            <h1 class="page-head__title">{{ __('Fixtures') }}</h1>
+            <p class="page-head__sub">{{ __('All :count matches · June 11 – July 19, 2026', ['count' => $totalMatches]) }}</p>
         </div>
 
         <div data-auto-filter>
             <form method="GET" action="{{ route('fixtures.index') }}" class="filters">
                 <div class="filters__group">
-                    <label class="filters__label" for="filter-stage">Stage</label>
+                    <label class="filters__label" for="filter-stage">{{ __('Stage') }}</label>
                     <select class="select" name="stage" id="filter-stage">
-                        <option value="">All stages</option>
+                        <option value="">{{ __('All stages') }}</option>
                         @foreach ($stages as $key => $label)
                             <option value="{{ $key }}" @selected(($filters['stage'] ?? null) === $key)>{{ $label }}</option>
                         @endforeach
@@ -25,9 +25,9 @@
                 </div>
 
                 <div class="filters__group">
-                    <label class="filters__label" for="filter-group">Group</label>
+                    <label class="filters__label" for="filter-group">{{ __('Group') }}</label>
                     <select class="select" name="group" id="filter-group">
-                        <option value="">All groups</option>
+                        <option value="">{{ __('All groups') }}</option>
                         @foreach ($groups as $g)
                             <option value="{{ $g->letter }}" @selected(($filters['group'] ?? null) === $g->letter)>{{ $g->name }}</option>
                         @endforeach
@@ -35,9 +35,9 @@
                 </div>
 
                 <div class="filters__group">
-                    <label class="filters__label" for="filter-date">Date</label>
+                    <label class="filters__label" for="filter-date">{{ __('Date') }}</label>
                     <select class="select" name="date" id="filter-date">
-                        <option value="">All dates</option>
+                        <option value="">{{ __('All dates') }}</option>
                         @foreach ($dates as $d)
                             <option value="{{ $d }}" @selected(($filters['date'] ?? null) === $d)>{{ \Illuminate\Support\Carbon::parse($d)->format('D, j M') }}</option>
                         @endforeach
@@ -45,19 +45,19 @@
                 </div>
 
                 <div class="filters__group">
-                    <label class="filters__label" for="filter-city">City</label>
+                    <label class="filters__label" for="filter-city">{{ __('City') }}</label>
                     <select class="select" name="city" id="filter-city">
-                        <option value="">All cities</option>
+                        <option value="">{{ __('All cities') }}</option>
                         @foreach ($venues as $v)
                             <option value="{{ $v->slug }}" @selected(($filters['city'] ?? null) === $v->slug)>{{ $v->city }}</option>
                         @endforeach
                     </select>
                 </div>
 
-                <a class="btn btn--ghost btn--sm filters__reset" href="{{ route('fixtures.index') }}">Reset</a>
+                <a class="btn btn--ghost btn--sm filters__reset" href="{{ route('fixtures.index') }}">{{ __('Reset') }}</a>
 
                 <noscript>
-                    <button type="submit" class="btn btn--primary btn--sm">Apply</button>
+                    <button type="submit" class="btn btn--primary btn--sm">{{ __('Apply') }}</button>
                 </noscript>
             </form>
         </div>
@@ -65,7 +65,7 @@
         @forelse ($fixturesByDate as $date => $dayFixtures)
             <div class="date-head">
                 <span class="date-head__day">{{ \Illuminate\Support\Carbon::parse($date)->format('l, j F Y') }}</span>
-                <span class="date-head__count">{{ $dayFixtures->count() }} {{ \Illuminate\Support\Str::plural('match', $dayFixtures->count()) }}</span>
+                <span class="date-head__count">{{ __(':count matches', ['count' => $dayFixtures->count()]) }}</span>
             </div>
 
             <div class="grid grid--2">
@@ -73,15 +73,15 @@
                     <a class="match-card" href="{{ route('fixtures.show', $f) }}">
                         <div class="match-card__top">
                             <span class="badge badge--stage">
-                                {{ $f->stage_label }}@if ($f->group) · {{ $f->group->name }}@endif
+                                {{ __($f->stage_label) }}@if ($f->group) · {{ $f->group->name }}@endif
                             </span>
 
                             @if ($f->is_live)
-                                <span class="badge badge--live">LIVE</span>
+                                <span class="badge badge--live">{{ __('LIVE') }}</span>
                             @elseif ($f->is_finished)
-                                <span class="badge badge--finished">FT</span>
+                                <span class="badge badge--finished">{{ __('FT') }}</span>
                             @else
-                                <span class="badge badge--scheduled">{{ $f->round_label ?? 'Upcoming' }}</span>
+                                <span class="badge badge--scheduled">{{ $f->round_label ?? __('Upcoming') }}</span>
                             @endif
                         </div>
 
@@ -128,8 +128,8 @@
         @empty
             <div class="empty-state">
                 <div class="empty-state__icon">⚽</div>
-                <p>No matches match these filters.</p>
-                <a class="btn btn--primary btn--sm" href="{{ route('fixtures.index') }}">Reset filters</a>
+                <p>{{ __('No matches match these filters.') }}</p>
+                <a class="btn btn--primary btn--sm" href="{{ route('fixtures.index') }}">{{ __('Reset filters') }}</a>
             </div>
         @endforelse
     </div>

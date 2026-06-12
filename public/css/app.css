@@ -82,6 +82,10 @@ img { max-width: 100%; display: block; }
 }
 .nav__link:hover { color: var(--text); background: var(--surface-2); }
 .nav__link--active { color: var(--primary); background: rgba(0, 224, 138, .10); }
+.lang-switch { display: inline-flex; margin-left: 8px; border: 1px solid var(--line); border-radius: 999px; overflow: hidden; }
+.lang-switch__opt { padding: 5px 11px; font-family: var(--display); font-size: 12.5px; font-weight: 600; letter-spacing: .5px; color: var(--text-2); transition: .15s; }
+.lang-switch__opt:hover { color: var(--text); background: var(--surface-2); }
+.lang-switch__opt.is-active { color: var(--primary-ink); background: var(--primary); }
 .nav__toggle { display: none; flex-direction: column; gap: 4px; background: none; border: 0; cursor: pointer; padding: 8px; }
 .nav__toggle span { width: 22px; height: 2px; background: var(--text); border-radius: 2px; }
 
@@ -359,6 +363,11 @@ a.bracket__match:hover { border-color: var(--primary); transform: translateY(-2p
 .empty-state--inline { grid-column: 1 / -1; padding: 26px 0; }
 .bracket-final { margin-top: 24px; }
 
+/* ---------- Legal pages (privacy / terms) ------------------------------ */
+.legal { max-width: 760px; }
+.legal h2 { font-family: var(--display); font-size: 18px; margin: 26px 0 8px; color: var(--text); }
+.legal p { color: var(--text-2); line-height: 1.7; margin: 0 0 6px; }
+
 /* ---------- Venues ------------------------------------------------------ */
 .venue-card { display: flex; flex-direction: column; gap: 5px; padding: 18px; background: var(--surface); border: 1px solid var(--line-soft); border-radius: var(--radius); transition: .18s; }
 .venue-card:hover { border-color: var(--primary); transform: translateY(-3px); }
@@ -408,10 +417,15 @@ a.bracket__match:hover { border-color: var(--primary); transform: translateY(-2p
 .player-card__num { color: var(--primary); font-family: var(--display); font-size: 15px; }
 .player-card__name { font-family: var(--display); font-size: 23px; text-transform: uppercase; letter-spacing: .5px; margin: 2px 0 4px; line-height: 1.15; }
 .player-card__team { color: var(--text-2); font-size: 14px; margin-bottom: 16px; }
-.player-card__stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.player-card__rows { display: flex; flex-direction: column; gap: 7px; margin: 4px 0 16px; }
+.player-card__row { display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 14px; color: var(--text-2); }
+.player-card__row-ic { font-size: 16px; flex: none; }
+.chip--xs { display: inline-block; font-family: var(--display); font-size: 10px; letter-spacing: .5px; padding: 1px 6px; border-radius: 999px; background: var(--surface-3); color: var(--text-2); vertical-align: middle; }
+.player-card__stats { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
 .player-card__stat { background: var(--surface-2); border: 1px solid var(--line-soft); border-radius: var(--radius-sm); padding: 11px 6px; }
 .player-card__stat-val { display: block; font-family: var(--display); font-size: 21px; color: var(--text); }
 .player-card__stat-label { display: block; font-size: 10px; text-transform: uppercase; letter-spacing: .4px; color: var(--muted); margin-top: 3px; }
+.player-card__wc { margin-top: 12px; padding: 8px 12px; border-radius: var(--radius-sm); background: rgba(0, 224, 138, .12); border: 1px solid rgba(0, 224, 138, .4); color: var(--primary); font-weight: 600; font-size: 13px; }
 .player-card__dob { font-size: 13px; margin: 14px 0; }
 
 /* ---------- Responsive -------------------------------------------------- */
@@ -428,6 +442,7 @@ a.bracket__match:hover { border-color: var(--primary); transform: translateY(-2p
     .nav__links { position: absolute; top: 68px; left: 0; right: 0; flex-direction: column; align-items: stretch; gap: 2px; padding: 12px 16px 18px; background: var(--bg-2); border-bottom: 1px solid var(--line); display: none; }
     .nav__links.is-open { display: flex; }
     .nav__link { padding: 12px 14px; }
+    .lang-switch { margin: 10px 0 0; align-self: flex-start; }
     .hero__card { padding: 26px 18px; }
     .hero__flag { font-size: 42px; }
     .countdown__unit { min-width: 64px; }
