@@ -205,7 +205,7 @@
                         </div>
                         @forelse($topScorers as $i => $player)
                             @if($loop->first)<div class="leaderboard">@endif
-                            <div class="leaderboard__item">
+                            <div class="leaderboard__item js-player" data-player-id="{{ $player->id }}" role="button" tabindex="0">
                                 <span class="leaderboard__rank {{ $loop->iteration === 1 ? 'leaderboard__rank--1' : '' }}">{{ $loop->iteration }}</span>
                                 @include('partials.avatar', ['player' => $player, 'size' => 'avatar--sm'])
                                 <span class="leaderboard__who">
@@ -230,7 +230,7 @@
                         </div>
                         @forelse($topAssists as $player)
                             @if($loop->first)<div class="leaderboard">@endif
-                            <div class="leaderboard__item">
+                            <div class="leaderboard__item js-player" data-player-id="{{ $player->id }}" role="button" tabindex="0">
                                 <span class="leaderboard__rank {{ $loop->iteration === 1 ? 'leaderboard__rank--1' : '' }}">{{ $loop->iteration }}</span>
                                 @include('partials.avatar', ['player' => $player, 'size' => 'avatar--sm'])
                                 <span class="leaderboard__who">
@@ -255,7 +255,7 @@
                         </div>
                         @forelse($topRated as $player)
                             @if($loop->first)<div class="leaderboard">@endif
-                            <div class="leaderboard__item">
+                            <div class="leaderboard__item js-player" data-player-id="{{ $player->id }}" role="button" tabindex="0">
                                 <span class="leaderboard__rank {{ $loop->iteration === 1 ? 'leaderboard__rank--1' : '' }}">{{ $loop->iteration }}</span>
                                 @include('partials.avatar', ['player' => $player, 'size' => 'avatar--sm'])
                                 <span class="leaderboard__who">

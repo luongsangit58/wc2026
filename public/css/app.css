@@ -363,6 +363,27 @@ a.bracket__match:hover { border-color: var(--primary); transform: translateY(-2p
 .venue-card__stats { display: flex; gap: 16px; margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--line-soft); color: var(--muted); font-size: 12.5px; }
 .venue-card__stats b { color: var(--primary); font-family: var(--display); font-size: 15px; }
 
+/* ---------- Player card modal ------------------------------------------- */
+.js-player { cursor: pointer; }
+.js-player:hover { background: var(--surface-2); }
+.pmodal { position: fixed; inset: 0; z-index: 100; display: grid; place-items: center; padding: 20px; }
+.pmodal[hidden] { display: none; }
+.pmodal__backdrop { position: absolute; inset: 0; background: rgba(4, 8, 16, .72); backdrop-filter: blur(4px); }
+.pmodal__card { position: relative; z-index: 1; width: 100%; max-width: 420px; background: linear-gradient(180deg, var(--surface), var(--bg-2)); border: 1px solid var(--line); border-radius: var(--radius-lg); box-shadow: var(--shadow-lg); padding: 26px; animation: pmIn .18s ease-out; }
+@keyframes pmIn { from { opacity: 0; transform: translateY(10px) scale(.98); } to { opacity: 1; transform: none; } }
+.pmodal__close { position: absolute; top: 8px; right: 14px; background: none; border: 0; color: var(--muted); font-size: 28px; line-height: 1; cursor: pointer; }
+.pmodal__close:hover { color: var(--text); }
+.pmodal__head { display: flex; align-items: center; gap: 16px; margin-bottom: 18px; }
+.pmodal__head .avatar { width: 76px; height: 76px; font-size: 26px; }
+.pmodal__num { color: var(--primary); font-family: var(--display); font-size: 15px; }
+.pmodal__name { margin: 2px 0; font-family: var(--display); font-size: 24px; text-transform: uppercase; letter-spacing: .5px; }
+.pmodal__team { color: var(--text-2); font-size: 14px; }
+.pmodal__stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 14px; }
+.pmodal__stat { background: var(--surface-2); border: 1px solid var(--line-soft); border-radius: var(--radius-sm); padding: 12px 6px; text-align: center; }
+.pmodal__stat-val { display: block; font-family: var(--display); font-size: 22px; color: var(--text); }
+.pmodal__stat-label { display: block; font-size: 10.5px; text-transform: uppercase; letter-spacing: .5px; color: var(--muted); margin-top: 3px; }
+.pmodal__meta { font-size: 13px; margin: 0 0 14px; }
+
 /* ---------- Responsive -------------------------------------------------- */
 @media (max-width: 900px) {
     .grid--sidebar, .grid--2, .grid--3, .grid--4 { grid-template-columns: 1fr; }

@@ -122,7 +122,7 @@
                                         <div class="squad-group__label">{{ $label }}</div>
                                         <div class="squad-list">
                                             @foreach ($squad[$code] as $p)
-                                                <div class="player">
+                                                <div class="player js-player" data-player-id="{{ $p->id }}" role="button" tabindex="0">
                                                     @include('partials.avatar', ['player' => $p, 'size' => 'avatar--sm'])
                                                     <span class="player__num">{{ $p->number }}</span>
                                                     <span>

@@ -10,11 +10,16 @@ class HomeController extends Controller
 {
     public function index(StandingsService $standings)
     {
+        // The next match to kick off (nearest in the future); fall back to the
+        // most recent one once the tournament is over.
+        $now = Fixture::effectiveNow();
         $featured = Fixture::with(['team1', 'team2', 'venue', 'group'])
-            ->upcoming()
-            ->chrono()
+            ->where('kickoff_at', '>=', $now)
+            ->orderBy('kickoff_at')
             ->first()
-            ?? Fixture::with(['team1', 'team2', 'venue', 'group'])->chrono()->first();
+            ?? Fixture::with(['team1', 'team2', 'venue', 'group'])
+                ->orderByDesc('kickoff_at')
+                ->first();
 
         $liveMatches = Fixture::with(['team1', 'team2', 'venue', 'group'])
             ->live()

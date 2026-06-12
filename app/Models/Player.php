@@ -24,9 +24,21 @@ class Player extends Model
         return $this->belongsTo(Team::class);
     }
 
+    public const POSITIONS = ['GK' => 'Goalkeeper', 'DF' => 'Defender', 'MF' => 'Midfielder', 'FW' => 'Forward'];
+
     public function getHasPhotoAttribute(): bool
     {
         return ! empty($this->photo_url);
+    }
+
+    public function getAgeAttribute(): ?int
+    {
+        return $this->date_of_birth?->age;
+    }
+
+    public function getPositionLabelAttribute(): string
+    {
+        return self::POSITIONS[$this->position] ?? ($this->position ?? '—');
     }
 
     /** Up to two initials for the avatar fallback. */

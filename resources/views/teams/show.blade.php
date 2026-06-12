@@ -115,7 +115,7 @@
                         <h3 class="squad-group__label">{{ $positionLabels[$pos] ?? $pos }}</h3>
                         <div class="squad-list">
                             @foreach($players as $p)
-                                <div class="player">
+                                <div class="player js-player" data-player-id="{{ $p->id }}" role="button" tabindex="0">
                                     @include('partials.avatar', ['player' => $p, 'size' => 'avatar--sm'])
                                     <span class="player__num">{{ $p->number ?? '—' }}</span>
                                     <span class="player__name">{{ $p->name }}</span>

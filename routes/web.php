@@ -3,6 +3,7 @@
 use App\Http\Controllers\BracketController;
 use App\Http\Controllers\FixturesController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\PlayersController;
 use App\Http\Controllers\StandingsController;
 use App\Http\Controllers\TeamsController;
 use App\Http\Controllers\VenuesController;
@@ -21,3 +22,5 @@ Route::get('/venues/{venue}', [VenuesController::class, 'show'])->name('venues.s
 
 Route::get('/teams', [TeamsController::class, 'index'])->name('teams.index');
 Route::get('/teams/{team}', [TeamsController::class, 'show'])->name('teams.show');
+
+Route::get('/players/{player}', [PlayersController::class, 'show'])->name('players.show');

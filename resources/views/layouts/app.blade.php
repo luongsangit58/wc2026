@@ -59,6 +59,15 @@
         </div>
     </footer>
 
+    {{-- Click-to-open player card (filled by app.js) --}}
+    <div class="pmodal" data-player-modal hidden>
+        <div class="pmodal__backdrop" data-pmodal-close></div>
+        <div class="pmodal__card" role="dialog" aria-modal="true" aria-label="Player profile">
+            <button class="pmodal__close" type="button" data-pmodal-close aria-label="Close">&times;</button>
+            <div data-pm-body></div>
+        </div>
+    </div>
+
     <script src="{{ asset('js/app.js') }}"></script>
     @stack('scripts')
 </body>
