@@ -64,7 +64,7 @@ class SimulateResults extends Command
                 // (finished scores never change; live scores only grow toward full-time).
                 mt_srand($baseSeed * 100000 + (int) $f->id);
 
-                $end = $f->kickoff_at->copy()->addMinutes(105);
+                $end = $f->kickoff_at->copy()->addMinutes(95); // aligns with the /95 live-score ramp below
                 $isLive = $asOf->lt($end);
 
                 $homeFull = $this->generateGoals();
@@ -106,6 +106,10 @@ class SimulateResults extends Command
         if ($this->option('live-demo')) {
             return $this->virtualClock((float) $this->option('speed'));
         }
+        // Real-time / fixed-moment runs are authoritative. Drop any demo clock so
+        // Fixture::effectiveNow() reads the same timeline as the board we just wrote
+        // (otherwise live_minute would desync from the scores).
+        @unlink(storage_path('app/sim-clock.json'));
         if ($this->option('as-of')) {
             return Carbon::parse($this->option('as-of'));
         }

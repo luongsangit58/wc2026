@@ -50,8 +50,15 @@ class SyncOpenfootball extends Command
                 $this->error("  HTTP {$resp->status()} for {$file}");
                 continue;
             }
-            file_put_contents("{$dir}/{$file}", $resp->body());
-            $this->info('  saved ' . number_format(strlen($resp->body())) . ' bytes');
+            $body = $resp->body();
+            try {
+                json_decode($body, true, 512, JSON_THROW_ON_ERROR); // reject HTML error/redirect pages
+            } catch (\JsonException $e) {
+                $this->error('  response was not valid JSON — skipped (existing file kept)');
+                continue;
+            }
+            file_put_contents("{$dir}/{$file}", $body);
+            $this->info('  saved ' . number_format(strlen($body)) . ' bytes');
             $ok++;
         }
 

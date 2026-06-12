@@ -360,6 +360,7 @@ a.bracket__match:hover { border-color: var(--primary); transform: translateY(-2p
 /* ---------- Responsive -------------------------------------------------- */
 @media (max-width: 900px) {
     .grid--sidebar, .grid--2, .grid--3, .grid--4 { grid-template-columns: 1fr; }
+    .lineups { grid-template-columns: 1fr; }
     .quick-actions { grid-template-columns: repeat(3, 1fr); }
     .stat-strip { grid-template-columns: repeat(2, 1fr); }
     .footer__inner { grid-template-columns: 1fr; }

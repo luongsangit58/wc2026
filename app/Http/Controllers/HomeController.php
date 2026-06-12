@@ -59,13 +59,15 @@ class HomeController extends Controller
     /** @return array<int,array{label:string,icon:string,url:string}> */
     private function quickActions(): array
     {
+        $final = Fixture::where('stage', 'final')->first();
+
         return [
             ['label' => 'My National Team', 'icon' => '🏳️', 'url' => route('teams.index')],
-            ['label' => 'Venue Guide', 'icon' => '📍', 'url' => route('venues.index')],
+            ['label' => 'Venue Guide', 'icon' => '🏟️', 'url' => route('venues.index')],
             ['label' => 'Knockout Bracket', 'icon' => '🏆', 'url' => route('bracket.index')],
-            ['label' => 'Stadiums', 'icon' => '🏟️', 'url' => route('venues.index')],
             ['label' => 'Fixtures', 'icon' => '📅', 'url' => route('fixtures.index')],
             ['label' => 'Standings', 'icon' => '📊', 'url' => route('standings.index')],
+            ['label' => 'The Final', 'icon' => '🥇', 'url' => $final ? route('fixtures.show', $final) : route('bracket.index')],
         ];
     }
 }

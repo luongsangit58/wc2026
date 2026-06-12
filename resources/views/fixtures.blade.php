@@ -95,7 +95,7 @@
                             </div>
 
                             <div class="match-card__mid">
-                                @if ($f->is_finished)
+                                @if ($f->has_score)
                                     <span class="match-card__score">{{ $f->team1_score }} - {{ $f->team2_score }}</span>
                                 @else
                                     <span class="match-card__time">

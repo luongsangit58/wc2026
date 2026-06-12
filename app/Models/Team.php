@@ -38,8 +38,7 @@ class Team extends Model
     public function fixtures()
     {
         return Fixture::query()
-            ->where('team1_id', $this->id)
-            ->orWhere('team2_id', $this->id)
+            ->where(fn ($q) => $q->where('team1_id', $this->id)->orWhere('team2_id', $this->id))
             ->orderBy('kickoff_at');
     }
 }

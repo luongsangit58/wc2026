@@ -33,15 +33,26 @@ if (! function_exists('shell_exec')) {
 }
 
 // --- authenticate ---
+// Manual trigger sends the secret in a header (NOT the URL, which would leak via
+// logs/history/Referer):   curl -H "X-Deploy-Token: <secret>" https://.../deploy.php
 $authorized = false;
-if (isset($_GET['token'])) {                       // manual browser test
-    $authorized = hash_equals($secret, (string) $_GET['token']);
+$manualToken = $_SERVER['HTTP_X_DEPLOY_TOKEN'] ?? '';
+if ($manualToken !== '') {
+    $authorized = hash_equals($secret, $manualToken);
 } else {                                           // GitHub webhook
+    $event = $_SERVER['HTTP_X_GITHUB_EVENT'] ?? '';
+    if ($event !== 'push') {
+        exit('Ignored event: ' . ($event ?: 'none') . "\n");
+    }
     $payload = file_get_contents('php://input');
     $sig = $_SERVER['HTTP_X_HUB_SIGNATURE_256'] ?? '';
     $authorized = $sig && hash_equals('sha256=' . hash_hmac('sha256', $payload, $secret), $sig);
-    if ($authorized) {                             // only deploy on push to main
-        $ref = json_decode($payload, true)['ref'] ?? '';
+    if ($authorized) {                             // only deploy on a normal push to main
+        $data = json_decode($payload, true) ?: [];
+        if (($data['deleted'] ?? false) === true) {
+            exit("Ignored: branch delete\n");
+        }
+        $ref = $data['ref'] ?? '';
         if ($ref !== 'refs/heads/main') {
             exit("Skipped: $ref (not the main branch)\n");
         }
@@ -50,6 +61,14 @@ if (isset($_GET['token'])) {                       // manual browser test
 if (! $authorized) {
     http_response_code(403);
     exit("Unauthorized (bad secret or signature).\n");
+}
+
+// --- single-flight lock: never let two deploys overlap ---
+set_time_limit(0);
+$lock = fopen($DIR . '/storage/deploy.lock', 'c');
+if (! $lock || ! flock($lock, LOCK_EX | LOCK_NB)) {
+    http_response_code(409);
+    exit("A deploy is already running.\n");
 }
 
 // --- run deploy (absolute paths + HOME because the web process lacks env) ---
@@ -69,3 +88,6 @@ $cmd = 'export HOME=' . escapeshellarg($home) . '; '
 echo "===== DEPLOY =====\n";
 echo shell_exec($cmd . ' 2>&1');
 echo "\n===== DONE =====\n";
+
+flock($lock, LOCK_UN);
+fclose($lock);

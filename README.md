@@ -116,7 +116,8 @@ Point the domain's document root at `…/wc2026.sangtrang.com/public`.
    - Content type: `application/json`
    - Secret: the same `DEPLOY_SECRET`
    - Events: just the `push` event.
-3. Test in a browser: `https://wc2026.sangtrang.com/deploy.php?token=<DEPLOY_SECRET>`
+3. Manual test (secret goes in a header, never the URL):
+   `curl -H "X-Deploy-Token: <DEPLOY_SECRET>" https://wc2026.sangtrang.com/deploy.php`
 
 ### Notes
 
