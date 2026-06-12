@@ -123,6 +123,7 @@
                                         <div class="squad-list">
                                             @foreach ($squad[$code] as $p)
                                                 <div class="player">
+                                                    @include('partials.avatar', ['player' => $p, 'size' => 'avatar--sm'])
                                                     <span class="player__num">{{ $p->number }}</span>
                                                     <span>
                                                         <span class="player__name">{{ $p->name }}</span>

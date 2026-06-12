@@ -116,6 +116,7 @@
                         <div class="squad-list">
                             @foreach($players as $p)
                                 <div class="player">
+                                    @include('partials.avatar', ['player' => $p, 'size' => 'avatar--sm'])
                                     <span class="player__num">{{ $p->number ?? '—' }}</span>
                                     <span class="player__name">{{ $p->name }}</span>
                                     <span class="player__pos">{{ $p->position }}</span>

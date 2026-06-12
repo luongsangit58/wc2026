@@ -272,9 +272,15 @@ a.match-card:hover { border-color: var(--line); transform: translateY(-2px); box
 .squad-group__label { font-family: var(--display); text-transform: uppercase; letter-spacing: 1px; color: var(--text-2); font-size: 14px; margin: 18px 0 10px; }
 .squad-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 10px; }
 .player { display: flex; align-items: center; gap: 12px; padding: 11px 14px; background: var(--surface); border: 1px solid var(--line-soft); border-radius: var(--radius-sm); }
-.player__num { font-family: var(--display); font-size: 18px; color: var(--primary); width: 28px; text-align: center; }
-.player__name { font-weight: 600; font-size: 14px; }
-.player__pos { color: var(--muted); font-size: 12px; }
+.player__num { font-family: var(--display); font-size: 18px; color: var(--primary); width: 28px; text-align: center; flex: none; }
+.player__name { font-weight: 600; font-size: 14px; flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.player__pos { color: var(--muted); font-size: 12px; flex: none; }
+
+/* player photos + initials-avatar fallback (shared) */
+.avatar { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; flex: none; background: var(--surface-3); border: 1px solid var(--line); }
+.avatar--initials { display: grid; place-items: center; font-family: var(--display); font-size: 14px; color: var(--primary-ink); letter-spacing: .5px; background: linear-gradient(135deg, var(--primary), #00b9d4); border: 0; }
+.avatar--sm { width: 32px; height: 32px; font-size: 12px; }
+.avatar--lg { width: 60px; height: 60px; font-size: 20px; }
 
 /* ---------- Filters ----------------------------------------------------- */
 .filters { display: flex; flex-wrap: wrap; gap: 14px; align-items: flex-end; padding: 18px; background: var(--surface); border: 1px solid var(--line-soft); border-radius: var(--radius); margin-bottom: 8px; }

@@ -53,7 +53,8 @@
             </nav>
             <p class="footer__note muted">
                 Unofficial fan project built with Laravel. Tournament data from the public-domain
-                <a href="https://github.com/openfootball/worldcup.json" rel="noopener">openfootball</a> dataset.
+                <a href="https://github.com/openfootball/worldcup.json" rel="noopener">openfootball</a> dataset ·
+                player photos via <a href="https://commons.wikimedia.org" rel="noopener">Wikipedia / Wikimedia Commons</a>.
             </p>
         </div>
     </footer>

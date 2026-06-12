@@ -207,10 +207,10 @@
                             @if($loop->first)<div class="leaderboard">@endif
                             <div class="leaderboard__item">
                                 <span class="leaderboard__rank {{ $loop->iteration === 1 ? 'leaderboard__rank--1' : '' }}">{{ $loop->iteration }}</span>
-                                <span class="leaderboard__flag">{{ $player->team?->flag_emoji ?? '🏳️' }}</span>
+                                @include('partials.avatar', ['player' => $player, 'size' => 'avatar--sm'])
                                 <span class="leaderboard__who">
                                     <span class="leaderboard__player">{{ $player->name }}</span>
-                                    <span class="leaderboard__team">{{ $player->team?->display_name }}</span>
+                                    <span class="leaderboard__team">{{ $player->team?->flag_emoji }} {{ $player->team?->display_name }}</span>
                                 </span>
                                 <span class="leaderboard__value">{{ $player->goals }}</span>
                             </div>
@@ -232,10 +232,10 @@
                             @if($loop->first)<div class="leaderboard">@endif
                             <div class="leaderboard__item">
                                 <span class="leaderboard__rank {{ $loop->iteration === 1 ? 'leaderboard__rank--1' : '' }}">{{ $loop->iteration }}</span>
-                                <span class="leaderboard__flag">{{ $player->team?->flag_emoji ?? '🏳️' }}</span>
+                                @include('partials.avatar', ['player' => $player, 'size' => 'avatar--sm'])
                                 <span class="leaderboard__who">
                                     <span class="leaderboard__player">{{ $player->name }}</span>
-                                    <span class="leaderboard__team">{{ $player->team?->display_name }}</span>
+                                    <span class="leaderboard__team">{{ $player->team?->flag_emoji }} {{ $player->team?->display_name }}</span>
                                 </span>
                                 <span class="leaderboard__value">{{ $player->assists }}</span>
                             </div>
@@ -257,10 +257,10 @@
                             @if($loop->first)<div class="leaderboard">@endif
                             <div class="leaderboard__item">
                                 <span class="leaderboard__rank {{ $loop->iteration === 1 ? 'leaderboard__rank--1' : '' }}">{{ $loop->iteration }}</span>
-                                <span class="leaderboard__flag">{{ $player->team?->flag_emoji ?? '🏳️' }}</span>
+                                @include('partials.avatar', ['player' => $player, 'size' => 'avatar--sm'])
                                 <span class="leaderboard__who">
                                     <span class="leaderboard__player">{{ $player->name }}</span>
-                                    <span class="leaderboard__team">{{ $player->team?->display_name }}</span>
+                                    <span class="leaderboard__team">{{ $player->team?->flag_emoji }} {{ $player->team?->display_name }}</span>
                                 </span>
                                 <span class="leaderboard__value">{{ $player->rating }}</span>
                             </div>

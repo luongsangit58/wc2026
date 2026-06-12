@@ -82,7 +82,18 @@ php artisan wc:simulate --as-of=2026-06-26T20:00:00   # ...as of a chosen moment
 php artisan wc:simulate --live-demo      # accelerated demo clock (matches visibly progress)
 php artisan wc:simulate --reset          # back to "tournament not started"
 php artisan wc:sync [--reseed]           # re-pull the openfootball source data
+php artisan wc:fetch-photos              # pull free player photos from Wikipedia (idempotent; re-run to fill gaps)
+php artisan wc:fetch-photos --team=france --force
 ```
+
+### Player photos
+
+`wc:fetch-photos` looks each player up on Wikipedia and stores the Wikimedia
+Commons thumbnail in `players.photo_url`. Players without a match fall back to a
+generated initials avatar, so every squad list, line-up and leaderboard always
+has a visual. The command is gentle (small concurrent batches + retry) and
+idempotent — re-run it to fill in players missed due to rate-limiting. Photos are
+free-licensed via Wikimedia Commons (attribute Wikipedia/Commons when displaying).
 
 - The browser **auto-refreshes every 30s while any match is live** (see `public/js/app.js`),
   paired with a server-side scheduler that ticks `wc:simulate` every minute
